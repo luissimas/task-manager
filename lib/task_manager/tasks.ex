@@ -18,7 +18,7 @@ defmodule TaskManager.Tasks do
 
   """
   def list_tasks do
-    Repo.all(Task)
+    Repo.all(from t in Task, order_by: [desc: t.inserted_at])
   end
 
   @doc """
@@ -101,4 +101,11 @@ defmodule TaskManager.Tasks do
   def change_task(%Task{} = task, attrs \\ %{}) do
     Task.changeset(task, attrs)
   end
+
+  def toggle_task_status(%Task{} = task) do
+    update_task(task, %{status: task_next_status(task)})
+  end
+
+  defp task_next_status(%Task{status: :closed}), do: :open
+  defp task_next_status(%Task{status: :open}), do: :closed
 end

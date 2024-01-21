@@ -5,8 +5,8 @@ defmodule TaskManager.Tasks.Task do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "tasks" do
-    field :position, :integer
-    field :status, Ecto.Enum, values: [:open, :closed]
+    field :position, :integer, default: 0
+    field :status, Ecto.Enum, values: [:open, :closed], default: :open
     field :description, :string
     field :title, :string
 
@@ -17,6 +17,7 @@ defmodule TaskManager.Tasks.Task do
   def changeset(task, attrs) do
     task
     |> cast(attrs, [:title, :description, :position, :status])
-    |> validate_required([:title, :description, :position, :status])
+    |> validate_required([:title, :position, :status])
+    |> validate_length(:title, min: 2)
   end
 end

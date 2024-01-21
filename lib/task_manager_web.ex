@@ -55,6 +55,7 @@ defmodule TaskManagerWeb do
         layout: {TaskManagerWeb.Layouts, :app}
 
       unquote(html_helpers())
+      unquote(live_view_helpers())
     end
   end
 
@@ -63,6 +64,7 @@ defmodule TaskManagerWeb do
       use Phoenix.LiveComponent
 
       unquote(html_helpers())
+      unquote(live_view_helpers())
     end
   end
 
@@ -92,6 +94,13 @@ defmodule TaskManagerWeb do
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
+    end
+  end
+
+  defp live_view_helpers do
+    quote do
+      defp ok(socket), do: {:ok, socket}
+      defp noreply(socket), do: {:noreply, socket}
     end
   end
 
