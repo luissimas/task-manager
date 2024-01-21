@@ -17,9 +17,15 @@ defmodule TaskManagerWeb.TaskLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <.form for={@form} phx-change="validate" phx-submit="save" class="flex inline-block">
-      <.input field={@form[:title]} placeholder="Title" autocomplete="off" phx-debounce="blur" />
-      <.button phx-disable-with="Saving...">
+    <.form for={@form} phx-change="validate" phx-submit="save" class="join w-full">
+      <.input
+        field={@form[:title]}
+        placeholder="Title"
+        autocomplete="off"
+        phx-debounce="200"
+        class="join-item w-full"
+      />
+      <.button phx-disable-with="Saving..." class="btn btn-neutral join-item">
         Create
       </.button>
     </.form>
@@ -34,14 +40,14 @@ defmodule TaskManagerWeb.TaskLive do
 
   def task(assigns) do
     ~H"""
-    <div id={@dom_id} class="flex py-2 w-full text-xl justify-between">
+    <div id={@dom_id} class="flex py-2 w-full justify-between">
       <div class="flex items-center gap-2">
         <input
           type="checkbox"
           checked={@task.status == :closed}
           phx-value-id={@task.id}
           phx-click="toggle-status"
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0 hover:cursor-pointer"
+          class="checkbox"
         />
         <p class={if @task.status == :closed, do: "line-through"}>
           <%= @task.title %>

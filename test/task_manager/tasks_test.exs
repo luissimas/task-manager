@@ -21,7 +21,12 @@ defmodule TaskManager.TasksTest do
     end
 
     test "create_task/1 with valid data creates a task" do
-      valid_attrs = %{position: 42, status: :open, description: "some description", title: "some title"}
+      valid_attrs = %{
+        position: 42,
+        status: :open,
+        description: "some description",
+        title: "some title"
+      }
 
       assert {:ok, %Task{} = task} = Tasks.create_task(valid_attrs)
       assert task.position == 42
@@ -36,7 +41,13 @@ defmodule TaskManager.TasksTest do
 
     test "update_task/2 with valid data updates the task" do
       task = task_fixture()
-      update_attrs = %{position: 43, status: :closed, description: "some updated description", title: "some updated title"}
+
+      update_attrs = %{
+        position: 43,
+        status: :closed,
+        description: "some updated description",
+        title: "some updated title"
+      }
 
       assert {:ok, %Task{} = task} = Tasks.update_task(task, update_attrs)
       assert task.position == 43
