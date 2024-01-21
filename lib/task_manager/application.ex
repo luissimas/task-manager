@@ -7,6 +7,8 @@ defmodule TaskManager.Application do
 
   @impl true
   def start(_type, _args) do
+    TaskManager.Release.migrate()
+
     children = [
       # Start the Telemetry supervisor
       TaskManagerWeb.Telemetry,
