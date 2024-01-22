@@ -6,6 +6,8 @@ defmodule TaskManagerWeb.TaskLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Tasks.subscribe()
+
     tasks = Tasks.list_tasks()
 
     socket
@@ -75,10 +77,9 @@ defmodule TaskManagerWeb.TaskLive do
   @impl true
   def handle_event("save", %{"task" => task}, socket) do
     case Tasks.create_task(task) do
-      {:ok, task} ->
+      {:ok, _task} ->
         socket
         |> assign(:form, to_form(Tasks.change_task(%Task{})))
-        |> stream_insert(:tasks, task, at: 0)
         |> noreply()
 
       {:error, changeset} ->
@@ -90,23 +91,40 @@ defmodule TaskManagerWeb.TaskLive do
 
   @impl true
   def handle_event("toggle-status", %{"id" => id}, socket) do
-    {:ok, task} =
+    {:ok, _task} =
       id
       |> Tasks.get_task!()
       |> Tasks.toggle_task_status()
 
+    noreply(socket)
+  end
+
+  @impl true
+  def handle_event("delete", %{"id" => id}, socket) do
+    {:ok, _task} =
+      id
+      |> Tasks.get_task!()
+      |> Tasks.delete_task()
+
+    noreply(socket)
+  end
+
+  @impl true
+  def handle_info({:task_created, task}, socket) do
+    socket
+    |> stream_insert(:tasks, task, at: 0)
+    |> noreply()
+  end
+
+  @impl true
+  def handle_info({:task_updated, task}, socket) do
     socket
     |> stream_insert(:tasks, task)
     |> noreply()
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    {:ok, task} =
-      id
-      |> Tasks.get_task!()
-      |> Tasks.delete_task()
-
+  def handle_info({:task_deleted, task}, socket) do
     socket
     |> stream_delete(:tasks, task)
     |> noreply()

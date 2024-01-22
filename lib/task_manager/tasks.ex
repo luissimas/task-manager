@@ -8,6 +8,22 @@ defmodule TaskManager.Tasks do
 
   alias TaskManager.Tasks.Task
 
+  @topic inspect(__MODULE__)
+
+  @doc """
+  Subscribes to the tasks topic.
+  """
+  def subscribe() do
+    Phoenix.PubSub.subscribe(TaskManager.PubSub, @topic)
+  end
+
+  defp broadcast({:ok, task} = result, tag) do
+    Phoenix.PubSub.broadcast(TaskManager.PubSub, @topic, {tag, task})
+    result
+  end
+
+  defp broadcast({:error, _changeset} = error, _tag), do: error
+
   @doc """
   Returns the list of tasks.
 
@@ -53,6 +69,7 @@ defmodule TaskManager.Tasks do
     %Task{}
     |> Task.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:task_created)
   end
 
   @doc """
@@ -71,6 +88,7 @@ defmodule TaskManager.Tasks do
     task
     |> Task.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:task_updated)
   end
 
   @doc """
@@ -87,6 +105,7 @@ defmodule TaskManager.Tasks do
   """
   def delete_task(%Task{} = task) do
     Repo.delete(task)
+    |> broadcast(:task_deleted)
   end
 
   @doc """
