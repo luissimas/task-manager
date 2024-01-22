@@ -27,11 +27,11 @@ defmodule TaskManagerWeb.TaskLive do
         phx-debounce="200"
         class="join-item w-full"
       />
-      <.button phx-disable-with="Saving..." class="btn btn-neutral join-item">
-        Create
+      <.button phx-disable-with="Saving..." class="btn-neutral join-item">
+        <.icon name="hero-plus" />
       </.button>
     </.form>
-    <div id="tasks" phx-update="stream" class="mt-8">
+    <div id="tasks" phx-update="stream" class="mt-4">
       <.task :for={{dom_id, task} <- @streams.tasks} dom_id={dom_id} task={task} />
     </div>
     """
@@ -42,7 +42,10 @@ defmodule TaskManagerWeb.TaskLive do
 
   def task(assigns) do
     ~H"""
-    <div id={@dom_id} class="flex py-2 w-full justify-between">
+    <div
+      id={@dom_id}
+      class="flex w-full justify-between border rounded-md my-2 px-2 py-3 border-base-200"
+    >
       <div class="flex items-center gap-2">
         <input
           type="checkbox"
@@ -51,9 +54,9 @@ defmodule TaskManagerWeb.TaskLive do
           phx-click="toggle-status"
           class="checkbox"
         />
-        <p class={if @task.status == :closed, do: "line-through"}>
+        <span class={if @task.status == :closed, do: "line-through"}>
           <%= @task.title %>
-        </p>
+        </span>
       </div>
       <.link phx-click="delete" phx-value-id={@task.id} class="hover:text-red-600">
         <.icon name="hero-trash" />

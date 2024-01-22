@@ -225,8 +225,8 @@ defmodule TaskManagerWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 py-2 px-3 btn",
+        "text-sm font-semibold leading-6",
         @class
       ]}
       {@rest}
@@ -370,7 +370,7 @@ defmodule TaskManagerWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "input input-bordered focus:outline-0",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          @errors == [] && "border-base-300 focus:border-base-400",
           @errors != [] && "border-rose-400 focus:border-rose-400",
           @class
         ]}
