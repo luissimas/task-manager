@@ -19,7 +19,7 @@ defmodule TaskManagerWeb.TaskLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <.form for={@form} phx-change="validate" phx-submit="save" class="join w-full">
+    <.form id="task-form" for={@form} phx-change="validate" phx-submit="save" class="join w-full">
       <.input
         field={@form[:title]}
         placeholder="Title"
@@ -54,11 +54,17 @@ defmodule TaskManagerWeb.TaskLive do
           phx-click="toggle-status"
           class="checkbox"
         />
-        <span class={if @task.status == :closed, do: "line-through"}>
-          <%= @task.title %>
-        </span>
+        <%= if @task.status == :closed do %>
+          <s>
+            <%= @task.title %>
+          </s>
+        <% else %>
+          <span>
+            <%= @task.title %>
+          </span>
+        <% end %>
       </div>
-      <.link phx-click="delete" phx-value-id={@task.id} class="hover:text-red-600">
+      <.link id="delete-task" phx-click="delete" phx-value-id={@task.id} class="hover:text-red-600">
         <.icon name="hero-trash" />
       </.link>
     </div>
