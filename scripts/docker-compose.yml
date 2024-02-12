@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  task-manager:
+    container_name: task-manager
+    image: task-manager:latest
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./task-manager.db:/app/task-manager.db
+    environment:
+      PHX_HOST: "todo.totorinho.duckdns.org"
+      DATABASE_PATH: "/app/task-manager.db"
+      SECRET_KEY_BASE: "rz9u6tcrc+l49hUU2CuaUL0vazjOkxexeiUKJL9/VicDQ8fi/86avq8KDlXBn1Ub"
